@@ -7,19 +7,28 @@
 
 import SwiftUI
 
+struct MissionData: Hashable {
+    var id = UUID()
+    var missions: [Mission]
+    
+    init(id: UUID = UUID(), missions: [Mission]) {
+        self.id = id
+        self.missions = missions
+    }
+}
+
 struct ContentView: View {
     @State private var isGrid = true
-    let astronauts: [String: Astronaut] = Bundle.main.decode("astronauts.json")
-    let missions: [Mission] = Bundle.main.decode("missions.json")
+    let missionData = MissionData(missions: Bundle.main.decode("missions.json"))
     
     var body: some View {
         NavigationStack {
             ScrollView {
                 if isGrid {
-                    GridLayout(astronauts: astronauts, missions: missions)
+                    GridLayout(missions: missionData.missions)
                         .transition(.slide)
                 } else {
-                    ListLayout(astronauts: astronauts, missions: missions)
+                    ListLayout(missions: missionData.missions)
                         .transition(.slide)
                 }
             }

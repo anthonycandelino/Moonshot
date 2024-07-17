@@ -8,15 +8,12 @@
 import SwiftUI
 
 struct ListLayout: View {
-    let astronauts: [String: Astronaut]
     let missions: [Mission]
     
     var body: some View {
         VStack {
             ForEach(missions) { mission in
-                NavigationLink {
-                    MissionView(mission: mission)
-                } label: {
+                NavigationLink(value: mission) {
                     VStack {
                         Image(mission.image)
                             .resizable()
@@ -43,6 +40,9 @@ struct ListLayout: View {
                             .stroke(.lightBackground)
                     )
                 }
+                .navigationDestination(for: Mission.self) { mission in
+                    MissionView(mission: mission)
+                }
                 .padding(.top, 5)
             }
         }
@@ -52,8 +52,7 @@ struct ListLayout: View {
 
 
 #Preview {
-    let astronauts: [String: Astronaut] = Bundle.main.decode("astronauts.json")
     let missions: [Mission] = Bundle.main.decode("missions.json")
     
-    return ListLayout(astronauts: astronauts, missions: missions)
+    return ListLayout(missions: missions)
 }
